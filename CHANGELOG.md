@@ -1,3 +1,6 @@
+## 0.2.0
+* changing the "remove" wording to "disable"
+
 ## 0.1.0 - First Release
 * Every feature added
 * Every bug fixed
