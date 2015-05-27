@@ -1,0 +1,16 @@
+{
+  "name": "remove-package-keybindings",
+  "main": "./lib/main",
+  "version": "0.0.0",
+  "description": "Removes package keymaps",
+  "keywords": [
+    "keybindings"
+  ],
+  "repository": "https://github.com/aki77/atom-remove-package-keybindings",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}
