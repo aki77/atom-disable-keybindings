@@ -1,10 +1,10 @@
-# remove-package-keybindings package
+# disable-package-keybindings package
 
-Removes package keymaps
+disables package keymaps
 
 ## Settings
 
-- `removesAllPackages` (default: false)
-- `removesPackages` (default: [])
+- `disableAllPackages` (default: false)
+- `disablePackages` (default: [])
 
-![](http://i.gyazo.com/075345fa93f3acbbbe71850a4f030d2d.png)
+![](http://i.gyazo.com/d5c6a62dc5ba3078645b23944f77d565.png)

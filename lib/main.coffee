@@ -4,12 +4,12 @@ module.exports =
   subscriptions: null
 
   config:
-    removesPackages:
+    disablePackages:
       type: 'array'
       default: []
       items:
         type: 'string'
-    removesAllPackages:
+    disableAllPackages:
       type: 'boolean'
       default: false
 
@@ -17,7 +17,7 @@ module.exports =
     @subscriptions = new CompositeDisposable
 
     callback = ({newValue}) => @reload(newValue)
-    @subscriptions.add(atom.config.onDidChange('remove-package-keybindings', callback))
+    @subscriptions.add(atom.config.onDidChange('disable-package-keybindings', callback))
 
     atom.packages.onDidActivateInitialPackages( => @initialize())
 
@@ -25,23 +25,23 @@ module.exports =
     @subscriptions.dispose()
 
   initialize: ->
-    config = atom.config.get('remove-package-keybindings')
+    config = atom.config.get('disable-package-keybindings')
     packages = atom.packages.getLoadedPackages()
 
-    return @removeKeymaps(packages) if config.removesAllPackages
-    return if config.removesPackages.length == 0
+    return @disableKeymaps(packages) if config.disableAllPackages
+    return if config.disablePackages.length == 0
 
-    for pack in packages when config.removesPackages.indexOf(pack.name) > -1
-      @removeKeymaps(pack)
+    for pack in packages when config.disablePackages.indexOf(pack.name) > -1
+      @disableKeymaps(pack)
 
     return
 
-  reload: ({removesAllPackages, removesPackages}) ->
+  reload: ({disableAllPackages, disablePackages}) ->
     packages = atom.packages.getLoadedPackages()
-    @removeKeymaps(packages)
-    return if removesAllPackages
+    @disableKeymaps(packages)
+    return if disableAllPackages
 
-    for pack in packages when removesPackages.indexOf(pack.name) < 0
+    for pack in packages when disablePackages.indexOf(pack.name) < 0
       @addKeymaps(pack)
 
   addKeymaps: (pack) ->
@@ -54,12 +54,12 @@ module.exports =
       atom.keymaps.add(keymapPath, map)
     return
 
-  removeKeymaps: (pack) ->
+  disableKeymaps: (pack) ->
     if Array.isArray(pack)
-      @removeKeymaps(p) for p in pack
+      @disableKeymaps(p) for p in pack
       return
 
     for [keymapPath, map] in pack.keymaps
-      #console.log "remove keymap: #{keymapPath}"
+      #console.log "disablekeymap: #{keymapPath}"
       atom.keymaps.removeBindingsFromSource(keymapPath)
     return
