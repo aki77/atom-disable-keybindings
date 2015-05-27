@@ -1,4 +1,4 @@
-# atom-remove-package-keybindings package
+# remove-package-keybindings package
 
 Removes package keymaps
 
