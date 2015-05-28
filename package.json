@@ -2,14 +2,16 @@
   "name": "disable-package-keybindings",
   "main": "./lib/main",
   "version": "0.2.0",
-  "description": "disables package keymaps",
+  "description": "disables keymaps",
   "keywords": [
     "keybindings"
   ],
-  "repository": "https://github.com/aki77/atom-disable-package-keybindings",
+  "repository": "https://github.com/aki77/atom-disable-keybindings",
   "license": "MIT",
   "engines": {
     "atom": ">=0.174.0 <2.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "underscore-plus": "^1.6.0"
+  }
 }

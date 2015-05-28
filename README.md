@@ -1,10 +1,11 @@
-# disable-package-keybindings package
+# disable-keybindings package
 
-disables package keymaps
+disables keymaps
 
 ## Settings
 
 - `disableAllPackages` (default: false)
 - `disablePackages` (default: [])
+- `disablePrefixKeys` (default: [])
 
-![](http://i.gyazo.com/d5c6a62dc5ba3078645b23944f77d565.png)
+![](http://i.gyazo.com/cf1498539937994300eb3b3b4b657778.png)
