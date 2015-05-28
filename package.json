@@ -1,5 +1,5 @@
 {
-  "name": "disable-package-keybindings",
+  "name": "disable-keybindings",
   "main": "./lib/main",
   "version": "0.2.0",
   "description": "disables keymaps",
