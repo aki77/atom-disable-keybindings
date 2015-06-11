@@ -26,7 +26,11 @@ module.exports =
     callback = _.debounce((=> @reload()), 1000)
     @subscriptions.add(atom.config.onDidChange('disable-keybindings', callback))
 
-    atom.packages.onDidActivateInitialPackages( => @reload())
+    @subscriptions.add(atom.packages.onDidActivateInitialPackages( => @reload()))
+
+    @subscriptions.add(atom.commands.add('atom-workspace', 'disable-keybindings:reload', =>
+      @reload()
+    ))
 
   deactivate: ->
     @subscriptions.dispose()

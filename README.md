@@ -10,6 +10,10 @@ Disables keybindings
 
 ![](http://i.gyazo.com/cf1498539937994300eb3b3b4b657778.png)
 
+## Commands
+
+- `disable-keybindings:reload`
+
 ## Links
 
 - [Bundled prefixed keys bindings delay even if 'unset!' by user keymap · Issue #78 · atom/atom-keymap](https://github.com/atom/atom-keymap/issues/78)
