@@ -1,5 +1,11 @@
-## 0.3.1
+## 0.4.0
+* Support update package by settings-view
+
+## 0.3.2
 * Add disable-keybindings:reload command
+
+## 0.3.1
+* Update README
 
 ## 0.3.0
 * Change package name

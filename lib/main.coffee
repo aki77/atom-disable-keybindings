@@ -1,5 +1,5 @@
 _ = require 'underscore-plus'
-{CompositeDisposable} = require 'atom'
+{CompositeDisposable, Disposable} = require 'atom'
 
 module.exports =
   subscriptions: null
@@ -23,10 +23,10 @@ module.exports =
     @subscriptions = new CompositeDisposable
     @removedKeyBindings = new Set
 
-    callback = _.debounce((=> @reload()), 1000)
-    @subscriptions.add(atom.config.onDidChange('disable-keybindings', callback))
+    @debouncedReload = _.debounce((=> @reload()), 1000)
+    @subscriptions.add(atom.config.onDidChange('disable-keybindings', @debouncedReload))
 
-    @subscriptions.add(atom.packages.onDidActivateInitialPackages( => @reload()))
+    @subscriptions.add(atom.packages.onDidActivateInitialPackages( => @init()))
 
     @subscriptions.add(atom.commands.add('atom-workspace', 'disable-keybindings:reload', =>
       @reload()
@@ -35,6 +35,21 @@ module.exports =
   deactivate: ->
     @subscriptions.dispose()
     @reset()
+
+  init: ->
+    @reload()
+    @subscriptions.add(atom.packages.onDidLoadPackage((pack) => @onLoadedPackage(pack)))
+
+  # need update-package
+  onLoadedPackage: (pack) ->
+    return @debouncedReload() if pack.settingsActivated
+
+    activateResources = pack.activateResources
+    pack.activateResources = =>
+      activateResources.call(pack)
+      pack.activateResources = activateResources
+      console.log 'activateResources', pack if atom.inDevMode()
+      @debouncedReload()
 
   reload: ->
     config = atom.config.get('disable-keybindings')
@@ -53,14 +68,14 @@ module.exports =
       @removeKeymapsByPrefixKey(config.disablePrefixKeys)
 
     for binding in _.difference(oldKeyBindings, atom.keymaps.keyBindings)
-      console.log 'disable keyBinding', binding if atom.devMode
+      console.log 'disable keyBinding', binding if atom.inDevMode()
       @removedKeyBindings.add(binding)
     return
 
   reset: ->
     @removedKeyBindings.forEach((binding) ->
       if atom.keymaps.keyBindings.indexOf(binding) is -1
-        console.log 'enable keyBinding', binding if atom.devMode
+        console.log 'enable keyBinding', binding if atom.inDevMode()
         atom.keymaps.keyBindings.push(binding)
     )
     @removedKeyBindings.clear()
