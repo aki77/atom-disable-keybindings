@@ -1,5 +1,5 @@
 _ = require 'underscore-plus'
-{CompositeDisposable, Disposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
 
 module.exports =
   subscriptions: null
