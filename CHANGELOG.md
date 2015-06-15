@@ -1,3 +1,6 @@
+## 0.5.0
+* Rewrite settings
+
 ## 0.4.0
 * Support update package by settings-view
 

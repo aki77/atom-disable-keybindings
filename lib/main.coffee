@@ -5,15 +5,46 @@ module.exports =
   subscriptions: null
 
   config:
-    disablePackages:
+    allBundledPackages:
+      order: 1
+      type: 'boolean'
+      default: false
+
+    bundledPackages:
+      order: 2
       type: 'array'
       default: []
       items:
         type: 'string'
-    disableAllPackages:
+
+    exceptBundledPackages:
+      order: 3
+      type: 'array'
+      default: []
+      items:
+        type: 'string'
+
+    allCommunityPackages:
+      order: 11
       type: 'boolean'
       default: false
-    disablePrefixKeys:
+
+    communityPackages:
+      order: 12
+      type: 'array'
+      default: []
+      items:
+        type: 'string'
+
+    exceptCommunityPackages:
+      order: 13
+      type: 'array'
+      default: []
+      items:
+        type: 'string'
+
+    prefixKeys:
+      order: 21
       type: 'array'
       default: []
       items:
@@ -22,6 +53,7 @@ module.exports =
   activate: (state) ->
     @subscriptions = new CompositeDisposable
     @removedKeyBindings = new Set
+    @debug = atom.inDevMode() and not atom.inSpecMode()
 
     @debouncedReload = _.debounce((=> @reload()), 1000)
     @subscriptions.add(atom.config.onDidChange('disable-keybindings', @debouncedReload))
@@ -48,37 +80,46 @@ module.exports =
     pack.activateResources = =>
       activateResources.call(pack)
       pack.activateResources = activateResources
-      console.log 'activateResources', pack if atom.inDevMode()
+      console.log 'activateResources', pack if @debug
       @debouncedReload()
 
   reload: ->
-    config = atom.config.get('disable-keybindings')
     packages = atom.packages.getLoadedPackages()
 
     @reset()
     oldKeyBindings = atom.keymaps.keyBindings.slice()
 
-    if config.disableAllPackages
-      @removeKeymapsFromPackage(packages)
-    else if config.disablePackages.length > 0
-      for pack in packages when config.disablePackages.indexOf(pack.name) > -1
-        @removeKeymapsFromPackage(pack)
-
-    if config.disablePrefixKeys.length > 0
-      @removeKeymapsByPrefixKey(config.disablePrefixKeys)
+    @disablePackageKeymaps()
+    @removeKeymapsByPrefixKey(atom.config.get('disable-keybindings.prefixKeys'))
 
     for binding in _.difference(oldKeyBindings, atom.keymaps.keyBindings)
-      console.log 'disable keyBinding', binding if atom.inDevMode()
+      console.log 'disable keyBinding', binding if @debug
       @removedKeyBindings.add(binding)
     return
 
   reset: ->
     @removedKeyBindings.forEach((binding) ->
-      if atom.keymaps.keyBindings.indexOf(binding) is -1
-        console.log 'enable keyBinding', binding if atom.inDevMode()
+      if binding not in atom.keymaps.keyBindings
+        console.log 'enable keyBinding', binding if @debug
         atom.keymaps.keyBindings.push(binding)
     )
     @removedKeyBindings.clear()
+
+  disablePackageKeymaps: ->
+    packages = atom.packages.getLoadedPackages().filter((pack) =>
+      @isDisablePackage(pack.name)
+    )
+    @removeKeymapsFromPackage(packages)
+
+  isDisablePackage: (name) ->
+    if atom.packages.isBundledPackage(name)
+      return false if name in atom.config.get('disable-keybindings.exceptBundledPackages')
+      return true if atom.config.get('disable-keybindings.allBundledPackages')
+      return name in atom.config.get('disable-keybindings.bundledPackages')
+    else
+      return false if name in atom.config.get('disable-keybindings.exceptCommunityPackages')
+      return true if atom.config.get('disable-keybindings.allCommunityPackages')
+      return name in atom.config.get('disable-keybindings.communityPackages')
 
   removeKeymapsFromPackage: (pack) ->
     if Array.isArray(pack)

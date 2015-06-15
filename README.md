@@ -1,14 +1,19 @@
 # disable-keybindings package
 
 Disables keybindings
+[![Build Status](https://travis-ci.org/aki77/atom-disable-keybindings.svg)](https://travis-ci.org/aki77/atom-disable-keybindings)
 
 ## Settings
 
-- `disableAllPackages` (default: false)
-- `disablePackages` (default: [])
-- `disablePrefixKeys` (default: [])
+- `allBundledPackages` (default: false)
+- `bundledPackages` (default: [])
+- `exceptBundledPackages` (default: [])
+- `allCommunityPackages` (default: false)
+- `communityPackages` (default: [])
+- `exceptCommunityPackages` (default: [])
+- `PrefixKeys` (default: [])
 
-![](http://i.gyazo.com/cf1498539937994300eb3b3b4b657778.png)
+[![Gyazo](http://i.gyazo.com/18a6d9f4ffb4371b947e22e9977bbe5a.png)](http://gyazo.com/18a6d9f4ffb4371b947e22e9977bbe5a)
 
 ## Commands
 
