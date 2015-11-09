@@ -18,6 +18,7 @@ Disables keybindings
 ## Commands
 
 - `disable-keybindings:reload`
+- `disable-keybindings:reset`
 
 ## Links
 

@@ -1,3 +1,7 @@
+## 0.6.0
+* Add disable-keybindings:reset command
+* Refactor
+
 ## 0.5.0
 * Rewrite settings
 
